@@ -1,0 +1,25 @@
+{
+  "name": "chat",
+  "version": "0.0.1",
+  "description": "웹 소켓",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app"
+  },
+  "author": "root",
+  "license": "ISC",
+  "dependencies": {
+    "chat": "file:",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.0",
+    "gif-chat": "file:",
+    "morgan": "^1.9.1",
+    "nunjucks": "^3.2.1",
+    "ws": "^8.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

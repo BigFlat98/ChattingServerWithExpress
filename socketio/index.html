@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <!-- 소켓 모듈 추가 . vue에서는 모듈을 추가해서 사용하는걸 권장 -->
+  <script src="/socket.io/socket.io.js"></script> 
+
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    #messages { list-style-type: none; padding: 0; }
+    #messages li { padding: 8px; margin: 5px; border-radius: 10px; max-width: 60%; }
+    .user1 { background-color: lightblue; align-self: flex-start; }
+    .user2 { background-color: lightgreen; align-self: flex-end; }
+    #chat-container { display: flex; flex-direction: column; align-items: center; }
+    #form { display: flex; }
+    #input { width: 200px; padding: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Socket.IO Chat</h1>
+  <div id="chat-container">
+    <ul id="messages"></ul>
+    <form id="form">
+      <input id="input" autocomplete="off" placeholder="Type a message..." />
+      <button>Send</button>
+    </form>
+  </div>
+
+  <script>
+    const socket = io(
+        {transports:['websocket']}
+    ); //소켓 연결. 소켓 연결시 옵션을 추가해서 사용하는 것을 권장.
+    let userName = '';//사용자 정보
+
+    // 서버에서 받은 사용자명 저장
+    socket.on('set username', (name) => {
+      userName = name;
+    });
+
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);//서버에 있는 socket.on('chat message',(msg)=>{}) 에 전달
+        input.value = '';
+      }
+    });
+
+    // 서버에서 받은 메시지를 채팅창에 추가
+    socket.on('chat message', function(data) {//서버에서 보낸 메시지를 받아서 채팅창에 추가. 서버에 있는 io.emit('chat message',{user:users[socket.id],text:msg}) 에서 보낸 메시지를 받아서 채팅창에 추가.
+      const item = document.createElement('li');
+      item.textContent = `${data.user}: ${data.text}`;
+      item.classList.add(data.user === userName ? 'user1' : 'user2');
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+</html>
