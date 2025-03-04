@@ -26,7 +26,7 @@ router.get("/rooms", async (req, res) => {
       console.error("❌ Error fetching chat rooms:", err);
       res.status(500).json({ error: "Server error" });
     }
-  });
+});
 
 //채팅 기록 조회
 router.get("/:userId", getChatHistory);

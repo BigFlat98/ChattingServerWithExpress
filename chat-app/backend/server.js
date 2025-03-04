@@ -12,11 +12,18 @@ connectDB(); //mongodb connection
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server,{
-    cors:{origin:"*"}
+const io = new Server(server, {
+    cors: {
+        origin: "*", // 모든 도메인 허용
+        methods: ["GET", "POST"],
+        credentials: false
+    }
 });
 
-app.use(cors());
+app.use(cors({
+    origin: "*", // 모든 도메인 허용
+    credentials: false // credentials을 false로 설정 (origin이 *일 때는 true를 사용할 수 없음)
+}));
 app.use(express.json());
 app.use(morgan("dev"));
 
